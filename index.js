@@ -7,14 +7,9 @@ const cors = require("cors");
 
 
 
-// MongoDB Start 
-mongoose.connect(
-    `mongodb+srv://${process.env.mongoUsername}:${process.env.mongoPassword}@cluster0.ta9wa.mongodb.net/database?retryWrites=true&w=majority`
-);
-
-mongoose.connection.once(
-    'open', () => console.log('Successfully connected to MongoDB')
-);
+// MongoDB 
+mongoose.connect(`${process.env.mongoConnectionString}`); // paste string in .env
+mongoose.connection.once('open', () => console.log('Connected to MongoDB'));
 
 
 
@@ -64,7 +59,7 @@ app.use("/users", userRoutes);
 const PORT = process.env.PORT;
 if(require.main === module){
 	app.listen(process.env.PORT, () => {
-		console.log(`API Successfully Running on PORT ${process.env.PORT} `)
+		console.log(`API Running on PORT ${process.env.PORT} `)
 	});
 }
 
