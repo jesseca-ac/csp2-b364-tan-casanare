@@ -8,7 +8,7 @@ const cors = require("cors");
 
 
 // MongoDB 
-mongoose.connect(`${process.env.mongoConnectionString}`); // paste string in .env
+mongoose.connect(`${process.env.mongoConnectionString}`);
 mongoose.connection.once('open', () => console.log('Connected to MongoDB'));
 
 
@@ -17,8 +17,6 @@ mongoose.connection.once('open', () => console.log('Connected to MongoDB'));
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-
-
 
 // Access to backend application
 app.use(cors());
