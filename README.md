@@ -2,15 +2,21 @@
 Capstone 2 Project - Backend API Server
 by Jesseca and Robert
 
+- add Google SSO clientID and clientSecret in .env
+- add MongoDB connection string in .env
+- record change logs below in chronological order, newest first
 
-## Change Logs (Newest First)
+
+## Change Logs
 
 ### March 1
 
 - Logged by Jesseca
 - Folders routes, controllers, models created
-- Files .gitignore, .env.sample, package.json created
-- Files auth.js, passport.js, userRoutes.js, userControllers.js, User.js created
+- Files .gitignore, .env.sample, package.json, auth.js, passport.js, userRoutes.js, userControllers.js, User.js created
 - Added the following dependencies: express, express-session, mongoose, dotenv, cors, bcrypt, jsonwebtoken, passport, passport-google-auth, passport-google-oauth20
 - Authentication: auth.js, passport.js, Google SSO completed
 - Users: model completed, routes and controllers for the following are completed - register, login, logout, reset password, get profile, update profile, Google SSO routes
+- Index: dependencies required, express and server environment, google sso and passport sessions, mongodb connection, dedicated area for route groupings
+- Tests: mongoDB connection successful, no dependency issues, no conflicts
+
