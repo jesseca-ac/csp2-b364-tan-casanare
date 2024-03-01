@@ -20,14 +20,5 @@ passport.use(new GoogleStrategy({
 
 
 // Serialization and deserialization of Users in Sessions
-passport.serializeUser(
-    function(user, done) {
-	    done(null, user);
-    }
-)
-
-passport.deserializeUser(
-    function(user, done) {
-	    done(null,user);
-    }
-)
+passport.serializeUser( function(user, done) { done(null, user) })
+passport.deserializeUser( function(user, done) { done(null,user) })

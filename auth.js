@@ -1,9 +1,10 @@
-const jwt = require("jsonwebtoken");
 require('dotenv').config()
+const jwt = require("jsonwebtoken");
 const secret = process.env.encryptionKey;
 
 
 
+// Creates Access Token
 module.exports.createAccessToken = (user) => {
     const data = {
         id: user._id,
@@ -16,6 +17,7 @@ module.exports.createAccessToken = (user) => {
 
 
 
+// Verify User
 module.exports.verify = (req, res, next) => {
     let token = req.headers.authorization
 
@@ -45,6 +47,7 @@ module.exports.verify = (req, res, next) => {
 
 
 
+// Verify if User is Admin
 module.exports.verifyAdmin = (req, res, next) => {
     if (req.user.isAdmin) {
         next();
@@ -59,6 +62,7 @@ module.exports.verifyAdmin = (req, res, next) => {
 
 
 
+// Checks if User is Logged In
 module.exports.isLoggedIn = (req, res, next) => {
 	if (req.user) {
 		next();

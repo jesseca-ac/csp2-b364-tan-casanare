@@ -1,0 +1,155 @@
+const User = require("../models/User");
+const bcrypt = require('bcrypt');
+const auth = require("../auth");
+
+
+// REGISTER USER
+module.exports.registerUser = (req, res) => {
+    if (!req.body.email.toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+    ) {
+        return res.status(400).send({ error: "Email is invalid" });
+    }
+
+    else if (req.body.password.length < 8) {
+        return res.status(400).send({ error: "Password must be atleast 8 characters" });
+    }
+
+    else if (!req.body.fullName.includes(" ")) {
+        return res.status(400).send({ error: "First and last names required" });
+    }
+
+    else {
+
+        let newUser = new User({
+            fullName: req.body.fullName,
+            email: req.body.email.toLowerCase(),
+            password: bcrypt.hashSync(req.body.password, 10),
+            isAdmin: req.body.isAdmin // optional
+        })
+
+        newUser.save()
+            .then((user) => res.status(201).send({ message: "Registration Successfull" }))
+            .catch(err => {
+                return res.status(500).send({ error: `Registration Error: ${err}` })
+            })
+    }
+};
+
+
+// LOGIN USER
+module.exports.loginUser = (req, res) => {
+    if (req.body.email.toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+    ) {
+        User.findOne({ email: req.body.email })
+            .then(result => {
+                if (result == null) {
+                    return res.status(404).send({ error: "No Email Found" });
+                }
+
+                else {
+                    const isPasswordCorrect = bcrypt.compareSync(req.body.password, result.password);
+
+                    if (isPasswordCorrect) {
+                        return res.status(200).send({ access: auth.createAccessToken(result) })
+
+                    }
+
+                    else {
+                        return res.status(401).send({ message: "Email and password do not match" });
+                    }
+                }
+            })
+            .catch(err => {
+                return res.status(500).send({ error: `User Not Found: ${err}` });
+            })
+    }
+
+    else {
+        return res.status(400).send({ error: "Email format invalid" });
+    }
+}
+
+
+// RESET PASSWORD
+module.exports.resetPassword = async (req, res) => {
+    try {
+        const { newPassword } = req.body;
+        const { id } = req.user;
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await User.findByIdAndUpdate(id, { password: hashedPassword });
+
+        res.status(200).send({ message: 'Reset Successful' });
+    }
+
+    catch (err) {
+        res.status(500).send({ message: `Reset Error: ${err}` });
+    }
+};
+
+
+// LOGOUT
+module.exports.logoutUser = (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            res.status(200).send({
+                message: `Failed to Logged Out: ${err}`
+            })
+
+        } else {
+            req.logout(() => {
+                res.status(200).send({
+                    message: `Successfully Logged Out`
+                })
+                res.redirect('/');
+            })
+        }
+    })
+};
+
+
+// GET USER DETAILS
+module.exports.getProfile = (req, res) => {
+    const userId = req.user.id;
+    User.findById(userId)
+        .then(user => {
+            if (!user) {
+                return res.status(404).send({ error: 'User Not Found' });
+            }
+
+            user.password = "********"; // Mask password
+            return res.status(200).send({ user });
+        })
+
+        .catch(err => {
+            return res.status(500).send({ error: `GET Profile Failed: ${err}` })
+        })
+};
+
+
+// UPDATE USER DETAILS
+module.exports.updateProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { fullName, email, isAdmin } = req.body;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { fullName, email, isAdmin },
+            { new: true }
+        );
+
+        res.status(200).send({ message: "Profile Updated Successfully", updatedUser })
+
+    }
+
+    catch (err) {
+        res.status(500).send({ error: `Failed to Update Profile: ${err}` });
+    }
+}
