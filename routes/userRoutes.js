@@ -6,20 +6,20 @@ const router = express.Router();
 
 
 // User Access routes
-router.post("/register", userController.registerUser);
+router.post("/", userController.registerUser);
 router.post("/login", userController.loginUser);
 router.get("/logout", userController.logoutUser);
-router.post('/reset-password', verify, userController.resetPassword);
+router.patch('/update-password', verify, userController.resetPassword);
 
 
 // Get user details and update user details
-router.get("/profile", verify, userController.getProfile);
-router.put('/profile', verify, userController.updateProfile);
+router.get("/details", verify, userController.getProfile);
+router.patch('/details', verify, userController.updateProfile);
 
 
 // Admin Access routes
-router.put('/set-admin', verify, verifyAdmin, userController.setAdmin);
-router.get("/user", verify, verifyAdmin, userController.getUser);
+router.patch('/set-as-admin', verify, verifyAdmin, userController.setAdmin);
+router.get("/user", verify, verifyAdmin, userController.getUser); // GET other user's data
 
 
 // Google SSO Routes

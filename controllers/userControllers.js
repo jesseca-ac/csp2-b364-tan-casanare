@@ -24,9 +24,12 @@ module.exports.registerUser = (req, res) => {
     else {
 
         let newUser = new User({
-            fullName: req.body.fullName,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
             email: req.body.email.toLowerCase(),
-            password: bcrypt.hashSync(req.body.password, 10)
+            password: bcrypt.hashSync(req.body.password, 10),
+            mobileNo: req.body.mobileNo,
+            isAdmin: false
         })
 
         newUser.save()
@@ -139,11 +142,11 @@ module.exports.getProfile = (req, res) => {
 module.exports.updateProfile = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { fullName, email } = req.body;
+        const { firstName, lastName, mobileNo, email } = req.body;
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { fullName, email },
+            { firstName, lastName, mobileNo, email },
             { new: true }
         );
 
