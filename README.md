@@ -9,6 +9,16 @@ by Jesseca and Robert
 
 ## Change Logs
 
+### March 2
+
+- Logged by Jesseca
+- POST /set-admin route and controller completed
+- GET /user to for admins to get other user profiles completed
+- GET /profile for non admins to get own profile details completed
+- Tests successful, no conflicts
+- s50 tasks completed
+
+
 ### March 1
 
 - Logged by Jesseca
