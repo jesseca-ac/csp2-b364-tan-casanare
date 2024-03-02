@@ -68,7 +68,7 @@ module.exports.isLoggedIn = (req, res, next) => {
 		next();
 
 	} else {
-		res.sendStatus(401).send({
+		res.status(401).send({
             auth: "Failed",
             message: "User Not Logged In"
         });

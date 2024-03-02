@@ -1,15 +1,15 @@
 const express = require("express");
 const passport = require('passport');
 const userController = require("../controllers/userControllers");
-const {verify, isLoggedIn} = require("../auth");
+const {verify, isLoggedIn, verifyAdmin} = require("../auth");
 const router = express.Router();
 
 
 // User Access routes
 router.post("/register", userController.registerUser);
 router.post("/login", userController.loginUser);
-router.post('/reset-password', verify, userController.resetPassword);
 router.get("/logout", userController.logoutUser);
+router.post('/reset-password', verify, userController.resetPassword);
 
 
 // Get user details and update user details
@@ -17,11 +17,9 @@ router.get("/profile", verify, userController.getProfile);
 router.put('/profile', verify, userController.updateProfile);
 
 
-
-
-
-
-
+// Admin Access routes
+router.put('/set-admin', verify, verifyAdmin, userController.setAdmin);
+router.get("/user", verify, verifyAdmin, userController.getUser);
 
 
 // Google SSO Routes

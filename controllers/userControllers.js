@@ -26,8 +26,7 @@ module.exports.registerUser = (req, res) => {
         let newUser = new User({
             fullName: req.body.fullName,
             email: req.body.email.toLowerCase(),
-            password: bcrypt.hashSync(req.body.password, 10),
-            isAdmin: req.body.isAdmin // optional
+            password: bcrypt.hashSync(req.body.password, 10)
         })
 
         newUser.save()
@@ -76,24 +75,6 @@ module.exports.loginUser = (req, res) => {
 }
 
 
-// RESET PASSWORD
-module.exports.resetPassword = async (req, res) => {
-    try {
-        const { newPassword } = req.body;
-        const { id } = req.user;
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-        await User.findByIdAndUpdate(id, { password: hashedPassword });
-
-        res.status(200).send({ message: 'Reset Successful' });
-    }
-
-    catch (err) {
-        res.status(500).send({ message: `Reset Error: ${err}` });
-    }
-};
-
-
 // LOGOUT
 module.exports.logoutUser = (req, res) => {
     req.session.destroy((err) => {
@@ -113,18 +94,39 @@ module.exports.logoutUser = (req, res) => {
     })
 };
 
+// RESET PASSWORD
+module.exports.resetPassword = async (req, res) => {
+    try {
+        const { newPassword } = req.body;
+        const { id } = req.user;
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-// GET USER DETAILS
+        await User.findByIdAndUpdate(id, { password: hashedPassword });
+
+        res.status(200).send({ message: 'Reset Successful' });
+    }
+
+    catch (err) {
+        res.status(500).send({ message: `Reset Error: ${err}` });
+    }
+};
+
+
+// GET OWN USER DETAILS
 module.exports.getProfile = (req, res) => {
     const userId = req.user.id;
+
     User.findById(userId)
         .then(user => {
             if (!user) {
                 return res.status(404).send({ error: 'User Not Found' });
             }
 
-            user.password = "********"; // Mask password
-            return res.status(200).send({ user });
+            else {
+                user.password = "********"; // Mask password
+                return res.status(200).send({ user });
+            }
+
         })
 
         .catch(err => {
@@ -133,15 +135,15 @@ module.exports.getProfile = (req, res) => {
 };
 
 
-// UPDATE USER DETAILS
+// UPDATE OWN USER DETAILS
 module.exports.updateProfile = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { fullName, email, isAdmin } = req.body;
+        const { fullName, email } = req.body;
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { fullName, email, isAdmin },
+            { fullName, email },
             { new: true }
         );
 
@@ -153,3 +155,48 @@ module.exports.updateProfile = async (req, res) => {
         res.status(500).send({ error: `Failed to Update Profile: ${err}` });
     }
 }
+
+
+
+// SET USER AS ADMIN (admin access required)
+module.exports.setAdmin = async (req, res) => {
+    try {
+        const userToUpdate = await User.findOne({ email: req.body.email });
+
+        if (!userToUpdate) {
+            return res.status(404).send({ error: `User with email ${req.body.email} not found` });
+        }
+
+        userToUpdate.isAdmin = req.body.isAdmin;
+        await userToUpdate.save();
+
+        let newAdminStatus = userToUpdate.isAdmin ? "now" : "no longer"
+        res.status(200).send({ message: `${req.body.email} is ${newAdminStatus} an Admin` });
+    }
+    
+    catch (err) {
+        res.status(500).send({ error: `Failed to Set ${req.body.email} as Admin: ${err.message}` });
+    }
+};
+
+
+// GET OTHER USER DETAILS (admin access required)
+module.exports.getUser = (req, res) => {
+    const userEmail = req.body.email;
+    User.findOne({ email: userEmail })
+        .then(user => {
+            if (!user) {
+                return res.status(404).send({ error: 'User Not Found' });
+            }
+
+            else {
+                user.password = "********"; // Mask password
+                return res.status(200).send({ user });
+            }
+
+        })
+
+        .catch(err => {
+            return res.status(500).send({ error: `GET Profile Failed: ${err}` })
+        })
+};
