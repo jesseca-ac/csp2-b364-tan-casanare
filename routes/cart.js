@@ -11,4 +11,8 @@ router.get("/getCart", verify, cartController.getCart);
 
 router.patch("/:productId/changeQty", verify, cartController.changeQty);
 
+router.patch("/:productId/delete", verify, cartController.deleteFromCart);
+
+router.patch("/clearCart", verify, cartController.clearCart);
+
 module.exports = router;
