@@ -117,54 +117,110 @@ module.exports.addToCart = (req, res) => {
 };
 
 module.exports.changeQty = (req, res) => {
+	if (req.user.isAdmin) {
+        return res.status(403).send({ message: "Admins are forbidden to have a cart." });
+    }
 
-	if(req.user.isAdmin) {
-		return res.status(403).send({ message: "Admins are forbidden to have a cart." });
-	}
-
-	let count = 0;
-	Cart.findOne({ userId: req.user.id })
+	Cart.findOne({
+		userId: req.user.id
+	})
 	.then(foundCart => {
-		foundCart.cartItems.forEach(item => {
-			if(item.productId == req.params.productId) {
-				item.quantity = req.body.quantity;
-				
-			}
-		})
+		if(foundCart)
+		{
+			const existingCartItem = foundCart.cartItems.find(cartItem => cartItem.productId == req.params.productId);
+            if (existingCartItem) {
+                existingCartItem.quantity = req.body.quantity;
+                const promises = foundCart.cartItems.map(cartItem => {
+	                return Product.findById(cartItem.productId)
+	                .then(foundProduct => {
+	                    cartItem.subtotal = cartItem.quantity * foundProduct.price;
+	                    return cartItem.subtotal;
+	                })
+	                .catch(prodErr => {
+	                    console.error("Error in finding product: ", prodErr);
+	                });
+	            });
 
-		return res.status(200).send({
-			message: "Product quantity updated.",
-			updatedProduct: foundCart
-		});
-		//console.log(foundCart.cartItems[0]);
+	            return Promise.all(promises)
+	            .then(subtotals => {
+	                foundCart.totalPrice = subtotals.reduce((total, subtotal) => total + subtotal, 0);
+	                return foundCart.save();
+	            })
+	            .then(savedCart => {
+	                return res.status(201).send({
+	                    message: "Successfully updated existing cart.",
+	                    updatedCart: savedCart
+	                });
+	            })
+	            .catch(err => {
+	                console.error("Error updating existing cart:", err);
+	                return res.status(500).send({ error: "Failed to update existing cart" });
+	            });
+            }
+            
+		}
+
+		return res.status(404).send({ message: "Product does not exist in cart." });
 	})
 	.catch(findErr => {
 		console.error("Error in finding cart: ", findErr);
-
+		return res.status(500).send({ error: "Failed to find cart" });
 	})
 };
 
 module.exports.deleteFromCart = (req, res) => {
-
-	if(req.user.isAdmin) {
+	if (req.user.isAdmin) {
 		return res.status(403).send({ message: "Admins are forbidden to have a cart." });
 	}
 
-	Cart.deleteOne(req.params.productId)
-	.then(foundProduct => {
-		if(!foundProduct) {
-			return res.status(404).send({ message: "Product not found." });
-		}
-		return res.send(200).send({
-			message: "Product successfully deleted.",
-			deletedProduct: foundProduct
+	Cart.findOne({ userId: req.user.id })
+		.then(foundCart => {
+			if (!foundCart) {
+				return res.status(404).send({ message: "Cart not found." });
+			}
+
+			const productId = req.params.productId;
+			const index = foundCart.cartItems.findIndex(item => item.productId == productId);
+
+			if (index === -1) {
+				return res.status(404).send({ message: "Product not found in cart." });
+			}
+
+			foundCart.cartItems.splice(index, 1);
+
+			const promises = foundCart.cartItems.map(cartItem => {
+				return Product.findById(cartItem.productId)
+					.then(foundProduct => {
+						cartItem.subtotal = cartItem.quantity * foundProduct.price;
+						return cartItem.subtotal;
+					})
+					.catch(prodErr => {
+						console.error("Error in finding product: ", prodErr);
+						throw new Error("Failed to find product");
+					});
+			});
+
+			return Promise.all(promises)
+				.then(subtotals => {
+					foundCart.totalPrice = subtotals.reduce((total, subtotal) => total + subtotal, 0);
+					return foundCart.save();
+				})
+				.then(savedCart => {
+					return res.status(200).send({
+						message: "Product successfully deleted from cart.",
+						updatedCart: savedCart
+					});
+				})
+				.catch(err => {
+					console.error("Error updating cart:", err);
+					return res.status(500).send({ error: "Failed to update cart." });
+				});
+		})
+		.catch(findErr => {
+			console.error("Error finding cart: ", findErr);
+			return res.status(500).send({ error: "Failed to find cart." });
 		});
-	})
-	.catch(delErr => {
-		console.error("Error in deleting product: ", delErr);
-		return res.status(500).send({ error: "Failed to delete product." })
-	})
-}
+};
 
 module.exports.clearCart = (req, res) => {
 
@@ -172,18 +228,25 @@ module.exports.clearCart = (req, res) => {
 		return res.status(403).send({ message: "Admins are forbidden to have a cart." });
 	}
 
-	Cart.findByIdAndDelete(req.user.id)
-	.then(foundCart => {
-		if(!foundCart) {
-			return res.status(404).send({ message: "Cart not found." });
-		}
-		return res.send(200).send({
-			message: "Cart cleared successfully.",
-			clearedCart: foundCart
-		});
+	Cart.findOneAndUpdate({
+		userId: req.user.id
+	},
+	{
+		cartItems: [],
+		totalPrice: 0
 	})
-	.catch(clearErr => {
-		console.error("Error in clearing cart: ", clearErr);
-		return res.status(500).send({ error: "Failed to clear cart." })
+	.then(foundCart => {
+		if(foundCart) {
+			return res.status(200).send({
+				message: "Cart cleared successfully.",
+				emptyCart: foundCart
+			})
+		}
+		console.log(req.user.id);
+		return res.status(404).send({ message: "Cart not found." });
+	})
+	.catch(findErr => {
+		console.error("Error in finding cart: ", findErr);
+		return res.status(500).send({ error: "Failed to find and update cart." });
 	})
 }
