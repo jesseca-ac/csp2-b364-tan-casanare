@@ -1,7 +1,7 @@
 {
   "name": "csp2-b364-tan-casanare",
   "version": "1.0.0",
-  "description": "",
+  "description": "Capstone 2 Project - Backend API Server\r by Jesseca and Robert",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,5 +23,9 @@
     "passport": "^0.7.0",
     "passport-google-auth": "^1.0.2",
     "passport-google-oauth20": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@ec2-54-147-90-61.compute-1.amazonaws.com:B364/csp2-b364-tan-casanare.git"
   }
 }

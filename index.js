@@ -47,7 +47,11 @@ app.use(passport.session())
 const userRoutes = require("./routes/userRoutes");
 app.use("/users", userRoutes);
 
+const product = require("./routes/product");
+app.use("/products", product);
 
+const cart = require("./routes/cart");
+app.use("/cart", cart);
 
 // ROUTES END
 
