@@ -18,7 +18,6 @@ const cartSchema = new mongoose.Schema({
 			subtotal: {
 				type: Number,
 				required: [true, 'Subtotal is Required'],
-				default: 0
 			}
 		}
 	],
