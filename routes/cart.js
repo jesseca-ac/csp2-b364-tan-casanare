@@ -5,9 +5,7 @@ const { verify, verifyAdmin } = auth;
 
 const router = express.Router();
 
-//router.post("/addToCart", verify, cartController.newCart);
-
-router.patch("/addToCart", verify, cartController.addToCart);
+router.post("/addToCart", verify, cartController.addToCart);
 
 router.get("/getCart", verify, cartController.getCart);
 
