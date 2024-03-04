@@ -26,6 +26,23 @@ module.exports.getCart = (req, res) => {
 
 };
 
+// module.exports.addToCart = (req, res) => {
+
+// 	if(req.user.isAdmin) {
+// 		return res.status(403).send({ message: "Admins are forbidden to have a cart." });
+// 	}
+
+// 	Cart.findOne({
+// 		userId: req.user.id
+// 	})
+// 	.then(foundCart => {
+
+// 		if(foundCart) {
+			
+// 		}
+// 	})
+// }
+
 module.exports.addToCart = (req, res) => {
 
 	if(req.user.isAdmin) {
@@ -49,13 +66,13 @@ module.exports.addToCart = (req, res) => {
 						Product.findById(bodyItem.productId)
 						.then(foundProduct => {
 							cartItem.subtotal = cartItem.quantity * foundProduct.price;
-
+							foundCart.totalPrice += cartItem.subtotal;
 						})
 						.catch(prodErr => {
 							console.error("Error in finding product: ", prodErr);
 							return res.status(500).send({ error: "Failed to find product" });
 						});
-						foundCart.totalPrice += cartItem.subtotal;
+						
 					}
 
 				});
