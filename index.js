@@ -1,15 +1,15 @@
 require('dotenv').config()
 const express = require("express");
 const mongoose = require("mongoose");
-const session = require('express-session');
-const passport = require('passport');
+const session = require("express-session");
+const passport = require("passport");
 const cors = require("cors");
 
 
 
 // MongoDB 
 mongoose.connect(`${process.env.mongoConnectionString}`);
-mongoose.connection.once('open', () => console.log('Connected to MongoDB'));
+mongoose.connection.once('open', () => console.log("Connected to MongoDB"));
 
 
 
@@ -35,7 +35,7 @@ app.use(
 
 
 // Passport initialization and Session
-require('./passport');
+require("./passport");
 app.use(passport.initialize());
 app.use(passport.session())
 
@@ -43,16 +43,17 @@ app.use(passport.session())
 
 // ROUTES START
 
-// User Routes
-const userRoutes = require("./routes/userRoutes");
+const users = require("./routes/user");
+app.use("/users", users);
 
-app.use("/users", userRoutes);
-
-const product = require("./routes/product");
-app.use("/products", product);
+const products = require("./routes/product");
+app.use("/products", products);
 
 const cart = require("./routes/cart");
 app.use("/cart", cart);
+
+const orders = require("./routes/order");
+app.use("/orders", orders);
 
 // ROUTES END
 
@@ -62,7 +63,7 @@ app.use("/cart", cart);
 const PORT = process.env.PORT;
 if(require.main === module){
 	app.listen(process.env.PORT, () => {
-		console.log(`API Running on PORT ${process.env.PORT} `)
+		console.log(`API Running on PORT ${process.env.PORT}`)
 	});
 }
 

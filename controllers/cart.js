@@ -196,7 +196,6 @@ module.exports.deleteFromCart = (req, res) => {
 					})
 					.catch(prodErr => {
 						console.error("Error in finding product: ", prodErr);
-						throw new Error("Failed to find product");
 					});
 			});
 
