@@ -144,6 +144,7 @@ module.exports.addToCart = (req, res) => {
 	});
 };
 
+
 // module.exports.addToCart = (req, res) => {
 
 // 	if(req.user.isAdmin) {

@@ -43,8 +43,7 @@ app.use(passport.session())
 
 // ROUTES START
 
-// User Routes
-const userRoutes = require("./routes/userRoutes");
+const userRoutes = require("./routes/user");
 
 app.use("/users", userRoutes);
 
