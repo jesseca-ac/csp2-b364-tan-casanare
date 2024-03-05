@@ -17,7 +17,7 @@ module.exports.registerUser = (req, res) => {
         return res.status(400).send({ error: "Password must be atleast 8 characters" });
     }
 
-    else if (!req.body.fullName.includes(" ")) {
+    else if (req.body.firstName == "" || req.body.lastName == "") {
         return res.status(400).send({ error: "First and last names required" });
     }
 
