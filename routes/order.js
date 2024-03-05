@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/checkout", verify, orderController.createOrder);
 
-router.get("/order", verify, orderController.getOrder);
+router.get("/orders", verify, orderController.getOrders);
 
 router.get("/all-orders", verify, verifyAdmin, orderController.allOrders);
 

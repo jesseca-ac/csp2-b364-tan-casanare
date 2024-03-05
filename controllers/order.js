@@ -2,15 +2,26 @@ const Order = require("../models/Order");
 const Cart = require("../models/Cart");
 
 
-module.exports.createOrder = (req, res) => {
-
-    Order.find({ userId: req.user.id, status: "Pending" })
-        .then(pendingOrders => {
-            if (pendingOrders.length > 0) {
-                return res.status(200).send({ pendingOrder })
+// reusable find() component
+const getOrders = (req, res, findParams, errMessage) => {
+    Order.find({ findParams })
+        .then(foundOrders => {
+            if (foundOrders.length > 0) {
+                return res.status(200).send({ foundOrders })
+            } else {
+                return res.status(404).send({ error: errMessage })
             }
+        })
+        .catch(err => {
+            return res.send(500).send({ error: `${errMessage} : ${err}` });
+        })
+}
 
-            else {
+
+module.exports.createOrder = (req, res) => {
+    getOrders(req, res, { userId: req.user.id, status: "Pending" }, "Unable to Checkout - No Pending Orders")
+        .then(pendingOrders => {
+            if (pendingOrders.length < 1) {
                 Cart.findOne({ userId: req.user.id })
                     .then(foundCart => {
                         if (!foundCart) {
@@ -38,40 +49,20 @@ module.exports.createOrder = (req, res) => {
                     .catch(err => {
                         return res.send(500).send({ error: `Cant checkout - Error in finding cart: ${err}` });
                     });
-
             }
         })
-
         .catch(err => {
             return res.send(500).send({ error: `Error in retrieving Pending Orders: ${err}` });
         });
-
 }
 
 
-module.exports.getOrder = (req, res) => {
-    Order.find({ userId: req.user.id, status: "Pending" })
-        .then(pendingOrders => {
-            if (pendingOrders.length > 0) {
-                return res.status(200).send({ pendingOrder })
-            }
-        })
-        .catch(err => {
-            return res.send(500).send({ error: `Failed to get the order: ${err}` });
-        })
+module.exports.getOrders = (req, res) => {
+    getOrders(req, res, { userId: req.user.id }, "User Orders Not Found")
 }
-
 
 
 module.exports.allOrders = (req, res) => {
-    Order.find().then(foundOrders => {
-        if (foundOrders.length > 0) {
-            return res.status(200).send({ foundOrders })
-        }
-    })
-    .catch(err => {
-        return res.send(500).send({ error: `Failed to get orders: ${err}` });
-    })
-
+    getOrders(req, res, {}, "All Orders Not Found")
 }
 
