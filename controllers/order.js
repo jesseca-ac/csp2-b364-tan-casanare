@@ -2,43 +2,45 @@ const Order = require("../models/Order");
 const Cart = require("../models/Cart");
 
 
+module.exports.createOrder = (req, res) => {
+
+    Cart.findOne({ userId: req.user.id })
+        .then(foundCart => {
+            if (!foundCart) {
+                return res.status(404).send({ message: "Cant checkout - Cart Not Found." });
+            }
+
+            else {
+                let newOrder = new Order({
+                    userId: req.user.id,
+                    orderItems: req.body.cartItems
+                })
+
+                newOrder.save()
+                    .then(savedOrder => {
+                        return res.status(200).send({
+                            message: "Order successfully created",
+                            newOrder: savedOrder
+                        });
+                    })
+                    .catch(error => {
+                        return res.status(500).send({ error: `Can't checkout - Error in saving order: ${error}` });
+                    });
+            }
+        })
+        .catch(err => {
+            return res.send(500).send({ error: `Cant checkout - Error in finding cart: ${err}` });
+        });
+}
+
 
 module.exports.getOrder = (req, res) => {
-    
+
+
 }
 
 
 module.exports.allOrders = (req, res) => {
-    
-}
-
-
-module.exports.checkout = (req, res) => {
 
 }
 
-
-// module.exports.getCart = (req, res) => {
-
-// 	if (req.user.isAdmin) {
-// 		return res.status(403).send({ message: "Admins are forbidden to have a cart." });
-// 	}
-
-// 	Cart.findOne({
-// 		userId: req.user.id
-// 	})
-// 		.then(foundCart => {
-// 			if (!foundCart) {
-// 				return res.status(404).send({ message: "Cart not found." });
-// 			}
-// 			return res.status(200).send({
-// 				message: "User's cart found.",
-// 				userCart: foundCart
-// 			});
-// 		})
-// 		.catch(findErr => {
-// 			console.error("Error in finding cart: ", err);
-// 			return res.send(500).send({ error: "Failed to find cart." });
-// 		});
-
-// };
