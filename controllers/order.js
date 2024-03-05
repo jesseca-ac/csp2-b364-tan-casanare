@@ -50,12 +50,28 @@ module.exports.createOrder = (req, res) => {
 
 
 module.exports.getOrder = (req, res) => {
-
-
+    Order.find({ userId: req.user.id, status: "Pending" })
+        .then(pendingOrders => {
+            if (pendingOrders.length > 0) {
+                return res.status(200).send({ pendingOrder })
+            }
+        })
+        .catch(err => {
+            return res.send(500).send({ error: `Failed to get the order: ${err}` });
+        })
 }
 
 
+
 module.exports.allOrders = (req, res) => {
+    Order.find().then(foundOrders => {
+        if (foundOrders.length > 0) {
+            return res.status(200).send({ foundOrders })
+        }
+    })
+    .catch(err => {
+        return res.send(500).send({ error: `Failed to get orders: ${err}` });
+    })
 
 }
 
