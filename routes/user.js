@@ -18,8 +18,8 @@ router.patch('/details', verify, userController.updateProfile);
 
 
 // Admin Access routes
-router.patch('/set-as-admin', verify, verifyAdmin, userController.setAdmin);
-router.get("/user", verify, verifyAdmin, userController.getUser); // GET other user's data
+router.patch('/:userId/set-as-admin', verify, verifyAdmin, userController.setAdmin);
+router.get("/", verify, verifyAdmin, userController.getUser); // GET other user's data
 
 
 // Google SSO Routes
