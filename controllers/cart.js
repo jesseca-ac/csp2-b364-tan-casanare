@@ -167,7 +167,7 @@ module.exports.changeQty = (req, res) => {
 		})
 };
 
-module.exports.deleteFromCart = (req, res) => {
+module.exports.removeFromCart = (req, res) => {
 	if (req.user.isAdmin) {
 		return res.status(403).send({ message: "Admins are forbidden to have a cart." });
 	}
