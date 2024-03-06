@@ -171,7 +171,9 @@ module.exports.activateProduct = (req, res) => {
 
 
 module.exports.searchByName = (req, res) => {
-	Product.find({ name: req.body.name })
+	let searchParam = new RegExp(req.body.name, 'i');
+
+	Product.find({ name: searchParam })
 		.then(foundProducts => {
 			if (!foundProducts) {
 				return res.status(404).send({ message: "Product not found." });
@@ -185,6 +187,7 @@ module.exports.searchByName = (req, res) => {
 
 
 module.exports.searchByPrice = (req, res) => {
+
 	Product.find({ price: req.body.price })
 		.then(foundProducts => {
 			if (!foundProducts) {
