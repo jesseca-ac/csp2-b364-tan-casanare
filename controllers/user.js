@@ -126,7 +126,7 @@ module.exports.getProfile = (req, res) => {
             }
 
             else {
-                user.password = "********"; // Mask password
+                //user.password = "********"; // Mask password
                 return res.status(200).send({ user });
             }
 
