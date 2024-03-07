@@ -8,7 +8,7 @@ const router = express.Router();
 // User Access routes
 router.post("/", userController.registerUser);
 router.post("/login", userController.loginUser);
-router.get("/logout", userController.logoutUser);
+//router.get("/logout", userController.logoutUser);
 router.patch('/update-password', verify, userController.resetPassword);
 
 
