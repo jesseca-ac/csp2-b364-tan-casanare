@@ -149,7 +149,7 @@ module.exports.updateProfile = async (req, res) => {
             { firstName, lastName, mobileNo, email },
             { new: true }
         );
-
+        updatedUser.password = "********"; // Mask password
         res.status(200).send({ message: "Profile Updated Successfully", updatedUser })
 
     }
