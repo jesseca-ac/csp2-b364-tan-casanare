@@ -246,8 +246,7 @@ module.exports.clearCart = (req, res) => {
 	.then(foundCart => {
 		if(foundCart) {
 			return res.status(200).send({
-				message: "Cart cleared successfully.",
-				emptyCart: foundCart
+				message: "Cart cleared successfully."
 			})
 		}
 		console.log(req.user.id);
