@@ -182,7 +182,7 @@ module.exports.deleteFromCart = (req, res) => {
 				return res.status(404).send({ message: "Cart not found." });
 			}
 
-			const productId = req.body.productId;
+			const productId = req.params.productId;
 			const index = foundCart.cartItems.findIndex(item => item.productId == productId);
 
 			
