@@ -1,4 +1,4 @@
-**#Capstone 2 Demo App Overview:**
+#Capstone 2 Demo App Overview
 
 **##Application Name: E-Commerce API**
 
