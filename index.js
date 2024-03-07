@@ -27,14 +27,13 @@ require("./passport");
 app.use(passport.initialize());
 app.use(passport.session())
 
-// Google SSO Session
-// app.use(
-//     session({
-//         secret: process.env.clientSecret,
-//         resave: false,
-//         saveUninitialized: false
-//     })
-// );
+app.use(
+    session({
+        secret: process.env.clientSecret,
+        resave: false,
+        saveUninitialized: false
+    })
+);
 
 
 // ROUTES START

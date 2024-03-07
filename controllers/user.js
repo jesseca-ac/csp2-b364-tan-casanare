@@ -126,7 +126,6 @@ module.exports.getProfile = (req, res) => {
             }
 
             else {
-                //user.password = "********"; // Mask password
                 return res.status(200).send({ user });
             }
 
@@ -149,7 +148,6 @@ module.exports.updateProfile = async (req, res) => {
             { firstName, lastName, mobileNo, email },
             { new: true }
         );
-        updatedUser.password = "********"; // Mask password
         res.status(200).send({ message: "Profile Updated Successfully", updatedUser })
 
     }
@@ -195,7 +193,6 @@ module.exports.getUser = (req, res) => {
             }
 
             else {
-                user.password = "********"; // Mask password
                 return res.status(200).send({ user });
             }
 
