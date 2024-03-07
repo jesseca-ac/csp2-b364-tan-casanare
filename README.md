@@ -1,12 +1,12 @@
-#Capstone 2 Demo App Overview
+**# Capstone 2 Demo App Overview**
 
-**##Application Name: E-Commerce API**
+**## Application Name: E-Commerce API**
 
-##Team Members:
+**## Team Members:**
 **- Jesseca Casañare**
 **- Robert Jonas Tan**
 
-**##User Credentials:**
+**## User Credentials:**
 - Admin User
 	- email: **ada@admin.com**
 	- password: **adminpass1234**
@@ -14,10 +14,8 @@
 	- email: **regine@mail.com**
 	- password: **regpass1234**
 
-**##Features:**
-============================
-**##Features by Jesseca Casañare**
-------------------------------
+**## Features:**
+**## Features by Jesseca Casañare**
 **User Resources:**
 - Register User
 - Login User
@@ -39,9 +37,7 @@
 
 Order Resources
 - Data Model
-===========================
-**##Features by Robert Jonas Tan**
-----------------------------
+**## Features by Robert Jonas Tan**
 **Cart Resources:**
 - Get User's Cart
 - Add to Cart
