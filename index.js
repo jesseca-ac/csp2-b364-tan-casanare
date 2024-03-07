@@ -22,8 +22,11 @@ app.use(express.urlencoded({extended:true}));
 app.use(cors());
 
 
+// Passport initialization and Session
+require("./passport");
+app.use(passport.initialize());
+app.use(passport.session())
 
-// Google SSO Session
 app.use(
     session({
         secret: process.env.clientSecret,
@@ -31,14 +34,6 @@ app.use(
         saveUninitialized: false
     })
 );
-
-
-
-// Passport initialization and Session
-require("./passport");
-app.use(passport.initialize());
-app.use(passport.session())
-
 
 
 // ROUTES START

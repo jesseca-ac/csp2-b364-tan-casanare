@@ -126,7 +126,6 @@ module.exports.getProfile = (req, res) => {
             }
 
             else {
-                //user.password = "********"; // Mask password
                 return res.status(200).send({ user });
             }
 
@@ -149,7 +148,6 @@ module.exports.updateProfile = async (req, res) => {
             { firstName, lastName, mobileNo, email },
             { new: true }
         );
-        updatedUser.password = "********"; // Mask password
         res.status(200).send({ message: "Profile Updated Successfully", updatedUser })
 
     }
@@ -164,21 +162,23 @@ module.exports.updateProfile = async (req, res) => {
 // SET USER AS ADMIN (admin access required)
 module.exports.setAdmin = async (req, res) => {
     try {
-        const userToUpdate = await User.findOne({ email: req.body.email });
+        const userId = req.params.userId;
+
+        const userToUpdate = await User.findOne({ _id: userId });
 
         if (!userToUpdate) {
-            return res.status(404).send({ error: `User with email ${req.body.email} not found` });
+            return res.status(404).send({ error: `User not found` });
         }
 
         userToUpdate.isAdmin = req.body.isAdmin;
         await userToUpdate.save();
 
         let newAdminStatus = userToUpdate.isAdmin ? "now" : "no longer"
-        res.status(200).send({ message: `${req.body.email} is ${newAdminStatus} an Admin` });
+        res.status(200).send({ message: `${userToUpdate.firstName} is ${newAdminStatus} an Admin` });
     }
     
     catch (err) {
-        res.status(500).send({ error: `Failed to Set ${req.body.email} as Admin: ${err.message}` });
+        res.status(500).send({ error: `Failed to set user as Admin: ${err.message}` });
     }
 };
 
@@ -193,7 +193,6 @@ module.exports.getUser = (req, res) => {
             }
 
             else {
-                user.password = "********"; // Mask password
                 return res.status(200).send({ user });
             }
 
