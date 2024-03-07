@@ -1,6 +1,7 @@
 const Product = require("../models/Product");
 const Cart = require("../models/Cart");
 
+
 module.exports.getCart = (req, res) => {
 
 	if(req.user.isAdmin) {
@@ -25,6 +26,7 @@ module.exports.getCart = (req, res) => {
 	});
 
 };
+
 
 module.exports.addToCart = (req, res) => {
     if (req.user.isAdmin) {
@@ -114,6 +116,7 @@ module.exports.addToCart = (req, res) => {
         });
 };
 
+
 module.exports.changeQty = (req, res) => {
 	if (req.user.isAdmin) {
         return res.status(403).send({ message: "Admins are forbidden to have a cart." });
@@ -166,6 +169,7 @@ module.exports.changeQty = (req, res) => {
 		return res.status(500).send({ error: "Failed to find cart" });
 	})
 };
+
 
 module.exports.deleteFromCart = (req, res) => {
 	if (req.user.isAdmin) {
@@ -220,6 +224,7 @@ module.exports.deleteFromCart = (req, res) => {
 			return res.status(500).send({ error: "Failed to find cart." });
 		});
 };
+
 
 module.exports.clearCart = (req, res) => {
 
