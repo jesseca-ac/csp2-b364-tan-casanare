@@ -23,13 +23,13 @@ app.use(cors());
 
 
 // Google SSO Session
-app.use(
-    session({
-        secret: process.env.clientSecret,
-        resave: false,
-        saveUninitialized: false
-    })
-);
+// app.use(
+//     session({
+//         secret: process.env.clientSecret,
+//         resave: false,
+//         saveUninitialized: false
+//     })
+// );
 
 
 
