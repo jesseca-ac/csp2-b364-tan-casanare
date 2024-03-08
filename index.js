@@ -8,8 +8,7 @@ const cors = require("cors");
 
 
 // MongoDB 
-//mongoose.connect(`${process.env.mongoConnectionString}`);
-mongoose.connect("mongodb+srv://rjstan03:admin1234@cluster0.mshqgl2.mongodb.net/tan-casañare_capstone2");
+mongoose.connect(`${process.env.mongoConnectionString}`);
 mongoose.connection.once('open', () => console.log("Connected to MongoDB"));
 
 
@@ -26,8 +25,7 @@ app.use(cors());
 // Google SSO Session
 app.use(
     session({
-        //secret: process.env.clientSecret,
-        secret: "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",
+        secret: process.env.clientSecret,
         resave: false,
         saveUninitialized: false
     })
@@ -60,18 +58,11 @@ app.use("/b1/orders", orders);
 
 
 // Environment Setup
-// const PORT = process.env.PORT;
-// if(require.main === module){
-// 	app.listen(process.env.PORT, () => {
-// 		console.log(`API Running on PORT ${process.env.PORT}`)
-// 	});
-// }
-
-const PORT = 4001;
+const PORT = process.env.PORT;
 if(require.main === module){
- app.listen(PORT, () => {
-     console.log(`API Running on PORT ${PORT}`)
- });
+	app.listen(process.env.PORT, () => {
+		console.log(`API Running on PORT ${process.env.PORT}`)
+	});
 }
 
 module.exports = app;
