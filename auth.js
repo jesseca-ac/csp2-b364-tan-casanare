@@ -1,6 +1,7 @@
 require('dotenv').config()
 const jwt = require("jsonwebtoken");
-const secret = process.env.encryptionKey;
+//const secret = process.env.encryptionKey;
+const secret = "ECommerceAPI";
 
 
 
