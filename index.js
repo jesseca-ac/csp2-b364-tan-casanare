@@ -42,16 +42,16 @@ app.use(passport.session())
 // ROUTES START
 
 const users = require("./routes/user");
-app.use("/users", users);
+app.use("/b1/users", users);
 
 const products = require("./routes/product");
-app.use("/products", products);
+app.use("/b1/products", products);
 
 const cart = require("./routes/cart");
-app.use("/cart", cart);
+app.use("/b1/cart", cart);
 
 const orders = require("./routes/order");
-app.use("/orders", orders);
+app.use("/b1/orders", orders);
 
 // ROUTES END
 
