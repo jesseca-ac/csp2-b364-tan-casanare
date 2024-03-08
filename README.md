@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 **#Capstone 2 Demo App Overview:**
 
 **##Application Name: E-Commerce API**
@@ -7,6 +8,17 @@
 **- Robert Jonas Tan**
 
 **##User Credentials:**
+=======
+# Capstone 2 Demo App Overview
+
+## Application Name: E-Commerce API
+
+## Team Members:
+ - **Jesseca Casañare**
+ - **Robert Jonas Tan**
+
+## User Credentials:
+>>>>>>> 119afa0283cb2a5e27106500f1dbf1501dc325c6
 - Admin User
 	- email: **ada@admin.com**
 	- password: **adminpass1234**
@@ -14,10 +26,15 @@
 	- email: **regine@mail.com**
 	- password: **regpass1234**
 
+<<<<<<< HEAD
 **##Features:**
 ============================
 **##Features by Jesseca Casañare**
 ------------------------------
+=======
+## Features:
+## Features by Jesseca Casañare
+>>>>>>> 119afa0283cb2a5e27106500f1dbf1501dc325c6
 **User Resources:**
 - Register User
 - Login User
@@ -39,9 +56,13 @@
 
 Order Resources
 - Data Model
+<<<<<<< HEAD
 ===========================
 **##Features by Robert Jonas Tan**
 ----------------------------
+=======
+## Features by Robert Jonas Tan
+>>>>>>> 119afa0283cb2a5e27106500f1dbf1501dc325c6
 **Cart Resources:**
 - Get User's Cart
 - Add to Cart
@@ -63,34 +84,10 @@ Order Resources
 - Non-admin User Checkout (Create Order)
 - Retrieve All orders (Admin Only)
 - Retrieve Authenticated User's Order# README
+<<<<<<< HEAD
 Capstone 2 Project - Backend API Server
 by Jesseca and Robert
+=======
+>>>>>>> 119afa0283cb2a5e27106500f1dbf1501dc325c6
 
-- add Google SSO clientID and clientSecret in .env
-- add MongoDB connection string in .env
-- record change logs below in chronological order, newest first
-
-
-## Change Logs
-
-### March 2
-
-- Logged by Jesseca
-- POST /set-admin route and controller completed
-- GET /user to for admins to get other user profiles completed
-- GET /profile for non admins to get own profile details completed
-- Tests successful, no conflicts
-- s50 tasks completed
-
-
-### March 1
-
-- Logged by Jesseca
-- Folders routes, controllers, models created
-- Files .gitignore, .env.sample, package.json, auth.js, passport.js, userRoutes.js, userControllers.js, User.js created
-- Added the following dependencies: express, express-session, mongoose, dotenv, cors, bcrypt, jsonwebtoken, passport, passport-google-auth, passport-google-oauth20
-- Authentication: auth.js, passport.js, Google SSO completed
-- Users: model completed, routes and controllers for the following are completed - register, login, logout, reset password, get profile, update profile, Google SSO routes
-- Index: dependencies required, express and server environment, google sso and passport sessions, mongodb connection, dedicated area for route groupings
-- Tests: mongoDB connection successful, no dependency issues, no conflicts
 

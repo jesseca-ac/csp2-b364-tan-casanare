@@ -97,6 +97,7 @@ module.exports.logoutUser = (req, res) => {
     })
 };
 
+
 // RESET PASSWORD
 module.exports.resetPassword = async (req, res) => {
     try {
