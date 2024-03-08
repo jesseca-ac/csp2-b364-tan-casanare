@@ -59,10 +59,10 @@ app.use("/b1/orders", orders);
 
 
 // Environment Setup
-const PORT = process.env.PORT;
+const PORT = 4001;
 if(require.main === module){
-	app.listen(process.env.PORT, () => {
-		console.log(`API Running on PORT ${process.env.PORT}`)
+	app.listen(PORT, () => {
+		console.log(`API Running on PORT ${PORT}`)
 	});
 }
 
