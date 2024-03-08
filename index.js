@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
-const passport = require("passport");
+// const passport = require("passport");
 const cors = require("cors");
 
 
@@ -35,9 +35,9 @@ app.use(cors());
 
 
 // Passport initialization and Session
-require("./passport");
-app.use(passport.initialize());
-app.use(passport.session())
+// require("./passport");
+// app.use(passport.initialize());
+// app.use(passport.session())
 
 
 // ROUTES START
