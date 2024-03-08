@@ -23,13 +23,14 @@ app.use(cors());
 
 
 // Google SSO Session
-// app.use(
-//     session({
-//         secret: process.env.clientSecret,
-//         resave: false,
-//         saveUninitialized: false
-//     })
-// );
+app.use(
+    session({
+        //secret: process.env.clientSecret,
+        secret: "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",
+        resave: false,
+        saveUninitialized: false
+    })
+);
 
 
 
@@ -58,11 +59,18 @@ app.use("/b1/orders", orders);
 
 
 // Environment Setup
+// const PORT = process.env.PORT;
+// if(require.main === module){
+// 	app.listen(process.env.PORT, () => {
+// 		console.log(`API Running on PORT ${process.env.PORT}`)
+// 	});
+// }
+
 const PORT = 4001;
 if(require.main === module){
-	app.listen(PORT, () => {
-		console.log(`API Running on PORT ${PORT}`)
-	});
+ app.listen(PORT, () => {
+     console.log(`API Running on PORT ${PORT}`)
+ });
 }
 
 module.exports = app;
