@@ -4,40 +4,42 @@ const auth = require("../auth");
 
 
 // REGISTER USER
-module.exports.registerUser = (req, res) => {
-    if (!req.body.email.toLowerCase()
-        .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        )
-    ) {
-        return res.status(400).send({ error: "Email is invalid" });
-    }
+module.exports.registerUser = (req,res) => {
 
+    // Checks if the email is in the right format
+    if (!req.body.email.includes("@")){
+        return res.status(400).send({ error: "Email invalid" });
+    }
+    // Checks if the mobile number has the correct number of characters
+    else if (req.body.mobileNo.length !== 11){
+        return res.status(400).send({ error: "Mobile number invalid" });
+    }
+    // Checks if the password has atleast 8 characters
     else if (req.body.password.length < 8) {
         return res.status(400).send({ error: "Password must be atleast 8 characters" });
-    }
-
-    else if (req.body.firstName == "" || req.body.lastName == "") {
-        return res.status(400).send({ error: "First and last names required" });
-    }
-
-    else {
-
+    // If all needed requirements are achieved
+    } else {
+        // Creates a variable "newUser" and instantiates a new "User" object using the mongoose model
+        // Uses the information from the request body to provide all the necessary information
         let newUser = new User({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email.toLowerCase(),
-            password: bcrypt.hashSync(req.body.password, 10),
-            mobileNo: req.body.mobileNo,
-            isAdmin: false
+            firstName : req.body.firstName,
+            lastName : req.body.lastName,
+            email : req.body.email,
+            mobileNo : req.body.mobileNo,
+            password : bcrypt.hashSync(req.body.password, 10)
         })
 
-        newUser.save()
-            .then((user) => res.status(201).send({ message: "Registration Successfull" }))
-            .catch(err => {
-                return res.status(500).send({ error: `Registration Error: ${err}` })
-            })
+        // Saves the created object to our database
+        // Then, return result to the handler function. No return keyword used because we're using arrow function's implicit return feature
+        // catch the error and return to the handler function. No return keyword used because we're using arrow function's implicit return feature
+        return newUser.save()
+        .then((user) => res.status(201).send({ message: "Registered Successfully" }))
+        .catch(err => {
+            console.error("Error in saving: ", err)
+            return res.status(500).send({ error: "Error in saving"})
+        })
     }
+
 };
 
 
@@ -76,27 +78,6 @@ module.exports.loginUser = (req, res) => {
         return res.status(400).send({ error: "Email format invalid" });
     }
 }
-
-
-// LOGOUT
-module.exports.logoutUser = (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            res.status(200).send({
-                message: `Failed to Logged Out: ${err}`
-            })
-
-        } else {
-            req.logout(() => {
-                res.status(200).send({
-                    message: `Successfully Logged Out`
-                })
-                res.redirect('/');
-            })
-        }
-    })
-};
-
 
 // RESET PASSWORD
 module.exports.resetPassword = async (req, res) => {
