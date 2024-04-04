@@ -1,9 +1,6 @@
 require('dotenv').config()
 const jwt = require("jsonwebtoken");
-//const secret = process.env.encryptionKey;
-const secret = "CourseBookingAPI";
-
-
+const secret = "ECommerceAPI";
 
 // Creates Access Token
 module.exports.createAccessToken = (user) => {
@@ -15,8 +12,6 @@ module.exports.createAccessToken = (user) => {
 
     return jwt.sign(data, secret, {});
 }
-
-
 
 // Verify User
 module.exports.verify = (req, res, next) => {
@@ -46,32 +41,24 @@ module.exports.verify = (req, res, next) => {
     }
 }
 
-
-
 // Verify if User is Admin
 module.exports.verifyAdmin = (req, res, next) => {
-    if (req.user.isAdmin) {
-        next();
 
+    // console.log() is used to confirm that "req.user" is added if the "verify" method comes first
+    // Else, it will be undefined.
+    // console.log("result from verifyAdmin method");
+    // console.log(req.user);
+
+    // Checks if the owner of the token is an admin.
+    if(req.user.isAdmin){
+        // If it is, move to the next middleware/controller using next() method.
+        next();
     } else {
+        // Else, end the request-response cycle by sending the appropriate response and status code.
         return res.status(403).send({
             auth: "Failed",
-            message: "Action Forbidden - User Not Admin"
+            message: "Action Forbidden"
         })
     }
-}
 
-
-
-// Checks if User is Logged In
-module.exports.isLoggedIn = (req, res, next) => {
-	if (req.user) {
-		next();
-
-	} else {
-		res.status(401).send({
-            auth: "Failed",
-            message: "User Not Logged In"
-        });
-	}
 }

@@ -154,24 +154,33 @@ module.exports.getProfile = (req, res) => {
 // UPDATE OWN USER DETAILS
 module.exports.updateProfile = async (req, res) => {
     try {
-        const userId = req.user.id;
-        const { firstName, lastName, mobileNo, email } = req.body;
 
+        // Add a console.log() to check if you can pass data properly from postman
+        // console.log(req.body);
+
+        // Add a console.log() to show req.user, our decoded token, does have id property
+        // console.log(req.user);
+            
+        // Get the user ID from the authenticated token
+        const userId = req.user.id;
+
+        // Retrieve the updated profile information from the request body
+        // Update the req.body to use mobileNo instead of mobileNumber to match our schema
+        const { firstName, lastName, mobileNo } = req.body;
+
+        // Update the user's profile in the database
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { firstName, lastName, mobileNo, email },
+            { firstName, lastName, mobileNo },
             { new: true }
         );
-        res.status(200).send({ message: "Profile Updated Successfully", updatedUser })
 
-    }
-
-    catch (err) {
-        res.status(500).send({ error: `Failed to Update Profile: ${err}` });
+        res.send(updatedUser);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Failed to update profile' });
     }
 }
-
-
 
 // SET USER AS ADMIN (admin access required)
 module.exports.setAdmin = async (req, res) => {
@@ -194,25 +203,4 @@ module.exports.setAdmin = async (req, res) => {
     catch (err) {
         res.status(500).send({ error: `Failed to set user as Admin: ${err.message}` });
     }
-};
-
-
-// GET OTHER USER DETAILS (admin access required)
-module.exports.getUser = (req, res) => {
-    const userEmail = req.body.email;
-    User.findOne({ email: userEmail })
-        .then(user => {
-            if (!user) {
-                return res.status(404).send({ error: 'User Not Found' });
-            }
-
-            else {
-                return res.status(200).send({ user });
-            }
-
-        })
-
-        .catch(err => {
-            return res.status(500).send({ error: `GET Profile Failed: ${err}` })
-        })
 };
