@@ -12,7 +12,7 @@ module.exports.createProduct = (req, res) => {
 	Product.findOne({ name: req.body.name })
 		.then(existingProduct => {
 			if (existingProduct) {
-				return res.status(409).send({ message: "Product already exists" })
+				return res.status(409).send({ error: "Product already exists" })
 			}
 
 			return newProduct.save()

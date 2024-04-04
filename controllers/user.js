@@ -183,24 +183,24 @@ module.exports.updateProfile = async (req, res) => {
 }
 
 // SET USER AS ADMIN (admin access required)
-module.exports.setAdmin = async (req, res) => {
-    try {
-        const userId = req.params.userId;
+// module.exports.setAdmin = async (req, res) => {
+//     try {
+//         const userId = req.params.userId;
 
-        const userToUpdate = await User.findOne({ _id: userId });
+//         const userToUpdate = await User.findOne({ _id: userId });
 
-        if (!userToUpdate) {
-            return res.status(404).send({ error: `User not found` });
-        }
+//         if (!userToUpdate) {
+//             return res.status(404).send({ error: `User not found` });
+//         }
 
-        userToUpdate.isAdmin = req.body.isAdmin;
-        await userToUpdate.save();
+//         userToUpdate.isAdmin = req.body.isAdmin;
+//         await userToUpdate.save();
 
-        let newAdminStatus = userToUpdate.isAdmin ? "now" : "no longer"
-        res.status(200).send({ message: `${userToUpdate.firstName} is ${newAdminStatus} an Admin` });
-    }
+//         let newAdminStatus = userToUpdate.isAdmin ? "now" : "no longer"
+//         res.status(200).send({ message: `${userToUpdate.firstName} is ${newAdminStatus} an Admin` });
+//     }
     
-    catch (err) {
-        res.status(500).send({ error: `Failed to set user as Admin: ${err.message}` });
-    }
-};
+//     catch (err) {
+//         res.status(500).send({ error: `Failed to set user as Admin: ${err.message}` });
+//     }
+// };
