@@ -41,7 +41,7 @@ module.exports.getAllProducts = (req, res) => {
 		.then(foundProducts => {
 			if (foundProducts.length > 0) {
 				return res.status(200).send({
-					message: "All products retrieved successfully.",
+					message: "Products retrieved successfully.",
 					allProducts: foundProducts
 				})
 			}
@@ -64,7 +64,7 @@ module.exports.getAllActive = (req, res) => {
 		.then(foundProducts => {
 			if (foundProducts.length > 0) {
 				return res.status(200).send({
-					message: "All active products retrieved successfully.",
+					message: "Products retrieved successfully.",
 					allActiveProducts: foundProducts
 				});
 			}
