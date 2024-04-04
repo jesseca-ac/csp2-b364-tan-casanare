@@ -14,7 +14,7 @@ router.patch('/update-password', verify, userController.resetPassword);
 
 // Get user details and update user details
 router.get("/details", verify, userController.getProfile);
-router.patch('/details', verify, userController.updateProfile);
+//router.patch('/details', verify, userController.updateProfile);
 
 
 // Admin Access routes
