@@ -89,7 +89,7 @@ module.exports.getProduct = (req, res) => {
 			}
 			return res.status(200).send({
 				message: "Product found.",
-				singleProduct: foundProduct
+				foundProduct: foundProduct
 			});
 		})
 		.catch(findErr => {
@@ -115,7 +115,7 @@ module.exports.updateProduct = (req, res) => {
 			}
 			return res.status(200).send({
 				message: "Product updated successfully",
-				updatedProduct: foundProduct
+				fondProduct: foundProduct
 			});
 		})
 		.catch(findErr => {
@@ -137,7 +137,7 @@ module.exports.archiveProduct = (req, res) => {
 			}
 			return res.status(200).send({
 				message: "Product archived successfully",
-				archivedProduct: foundProduct
+				foundProduct: foundProduct
 			});
 		})
 		.catch(findErr => {
@@ -160,7 +160,7 @@ module.exports.activateProduct = (req, res) => {
 			}
 			return res.status(200).send({
 				message: "Product activated successfully",
-				activatedProduct: foundProduct
+				foundProduct: foundProduct
 			});
 		})
 		.catch(findErr => {
