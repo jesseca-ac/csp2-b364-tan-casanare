@@ -22,6 +22,6 @@ router.patch("/:productId/activate", verify, verifyAdmin, productController.acti
 
 router.post("/searchByName", productController.searchByName);
 
-router.post("/searchByPrice", productController.searchByPrice);
+//router.post("/searchByPrice", productController.searchByPrice);
 
 module.exports = router;

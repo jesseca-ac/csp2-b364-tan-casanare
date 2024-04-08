@@ -6,7 +6,8 @@ module.exports.createProduct = (req, res) => {
 	const newProduct = new Product({
 		name: req.body.name,
 		description: req.body.description,
-		price: req.body.price
+		price: req.body.price,
+		imgLink: req.body.imgLink
 	});
 
 	Product.findOne({ name: req.body.name })
@@ -105,7 +106,8 @@ module.exports.updateProduct = (req, res) => {
 	let updatedProduct = {
 		name: req.body.name,
 		description: req.body.description,
-		price: req.body.price
+		price: req.body.price,
+		imgLink: req.body.imgLink
 	}
 
 	return Product.findByIdAndUpdate(req.params.productId, updatedProduct)
@@ -170,32 +172,33 @@ module.exports.activateProduct = (req, res) => {
 };
 
 
-module.exports.searchByName = (req, res) => {
-	let searchParam = new RegExp(req.body.name, 'i');
+module.exports.searchByName = async (req, res) => {
+	try {
+	  const { productName } = req.body;
+  
+	  // Use a regular expression to perform a case-insensitive search
+	  const products = await product.find({
+		name: { $regex: productName, $options: 'i' }
+	  });
+  
+	  res.json(products);
+	} catch (error) {
+	  console.error(error);
+	  res.status(500).json({ error: 'Internal Server Error' });
+	}
+};
 
-	Product.find({ name: searchParam })
-		.then(foundProducts => {
-			if (!foundProducts) {
-				return res.status(404).send({ message: "Product not found." });
-			}
-			return res.status(200).send({ foundProducts });
-		})
-		.catch(err => {
-			return res.status(500).send({ error: `Error finding products: ${err}` });
-		});
-}
 
+// module.exports.searchByPrice = (req, res) => {
 
-module.exports.searchByPrice = (req, res) => {
-
-	Product.find({ price: req.body.price })
-		.then(foundProducts => {
-			if (!foundProducts) {
-				return res.status(404).send({ message: "Product not found." });
-			}
-			return res.status(200).send({ foundProducts });
-		})
-		.catch(err => {
-			return res.status(500).send({ error: `Error finding products: ${err}` });
-		});
-}
+// 	Product.find({ price: req.body.price })
+// 		.then(foundProducts => {
+// 			if (!foundProducts) {
+// 				return res.status(404).send({ message: "Product not found." });
+// 			}
+// 			return res.status(200).send({ foundProducts });
+// 		})
+// 		.catch(err => {
+// 			return res.status(500).send({ error: `Error finding products: ${err}` });
+// 		});
+// }
