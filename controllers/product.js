@@ -126,6 +126,21 @@ module.exports.updateProduct = (req, res) => {
 		});
 };
 
+module.exports.deleteProduct = (req, res) => {
+	
+	return Product.findByIdAndDelete(req.params.productId)
+	.then(foundProduct => {
+		if(!foundProduct) {
+			return res.status(404).send({ error: "Product not found." });
+		}
+
+		return res.status(200).send({ message: "Product deleted successfully."});
+	})
+	.catch(findErr => {
+			console.error("Error in finding & deleting product: ", err);
+			return res.status(500).send({ error: "Failed to find & delete product." })
+		});
+}
 
 module.exports.archiveProduct = (req, res) => {
 

@@ -20,6 +20,8 @@ router.patch("/:productId/archive", verify, verifyAdmin, productController.archi
 
 router.patch("/:productId/activate", verify, verifyAdmin, productController.activateProduct);
 
+router.get("/:productId/delete", verify, verifyAdmin, productController.deleteProduct);
+
 router.post("/searchByName", productController.searchByName);
 
 //router.post("/searchByPrice", productController.searchByPrice);
