@@ -45,85 +45,53 @@ module.exports.addToCart = (req, res) => {
                         foundCart.cartItems.push(bodyItem);
                     }
                 });
-
-                // Fetch product details for each cart item
-                const promises = foundCart.cartItems.map(cartItem => {
-                    return Product.findById(cartItem.productId)
-                        .then(foundProduct => {
-                            // Include product name and description
-                            cartItem.productName = foundProduct.name;
-                            cartItem.productDescription = foundProduct.description;
-                            cartItem.productPrice = foundProduct.price;
-                            cartItem.subtotal = cartItem.quantity * foundProduct.price;
-                            return cartItem;
-                        })
-                        .catch(prodErr => {
-                            console.error("Error in finding product: ", prodErr);
-                            return res.status(500).send({ error: "Failed to find product." });
-                        });
-                });
-
-                return Promise.all(promises)
-                    .then(updatedCartItems => {
-                        foundCart.totalPrice = updatedCartItems.reduce((total, cartItem) => total + cartItem.subtotal, 0);
-                        return foundCart.save();
-                    })
-                    .then(savedCart => {
-                        return res.status(201).send({
-                            message: "Successfully updated existing cart.",
-                            updatedCart: savedCart
-                        });
-                    })
-                    .catch(err => {
-                        console.error("Error updating existing cart:", err);
-                        return res.status(500).send({ error: "Failed to update existing cart" });
-                    });
             } else {
                 // Create new cart
-                let newCart = new Cart({
+                foundCart = new Cart({
                     userId: req.user.id,
                     cartItems: req.body.cartItems
                 });
-
-                // Fetch product details for each cart item
-                const promises = newCart.cartItems.map(cartItem => {
-                    return Product.findById(cartItem.productId)
-                        .then(foundProduct => {
-                            // Include product name and description
-                            cartItem.productName = foundProduct.name;
-                            cartItem.productDescription = foundProduct.description;
-                            cartItem.productPrice = foundProduct.price;
-                            cartItem.subtotal = cartItem.quantity * foundProduct.price;
-                            return cartItem;
-                        })
-                        .catch(prodErr => {
-                            console.error("Error in finding product: ", prodErr);
-                            return res.status(500).send({ error: "Failed to find product." });
-                        });
-                });
-
-                return Promise.all(promises)
-                    .then(updatedCartItems => {
-                        newCart.totalPrice = updatedCartItems.reduce((total, cartItem) => total + cartItem.subtotal, 0);
-                        return newCart.save();
-                    })
-                    .then(savedCart => {
-                        return res.status(201).send({
-                            message: "Successfully added to cart.",
-                            addedToCart: savedCart
-                        });
-                    })
-                    .catch(err => {
-                        console.error("Error saving new cart:", err);
-                        return res.status(500).send({ error: "Failed to save new cart" });
-                    });
             }
+
+            // Fetch product details for each cart item
+            const promises = foundCart.cartItems.map(cartItem => {
+                return Product.findById(cartItem.productId)
+                    .then(foundProduct => {
+                        // Include product details (name, description, price)
+                        cartItem.productName = foundProduct.name;
+                        cartItem.productDescription = foundProduct.description;
+                        cartItem.price = foundProduct.price; // Include product price
+                        cartItem.subtotal = cartItem.quantity * foundProduct.price;
+                        return cartItem;
+                    })
+                    .catch(prodErr => {
+                        console.error("Error in finding product: ", prodErr);
+                        return res.status(500).send({ error: "Failed to find product." });
+                    });
+            });
+
+            return Promise.all(promises)
+                .then(updatedCartItems => {
+                    foundCart.totalPrice = updatedCartItems.reduce((total, cartItem) => total + cartItem.subtotal, 0);
+                    return foundCart.save();
+                })
+                .then(savedCart => {
+                    return res.status(201).send({
+                        message: foundCart._id ? "Successfully updated existing cart." : "Successfully added to cart.",
+                        cart: savedCart
+                    });
+                })
+                .catch(err => {
+                    console.error("Error saving cart:", err);
+                    return res.status(500).send({ error: "Failed to save cart" });
+                });
         })
         .catch(findErr => {
             console.error("Error in finding cart: ", findErr);
             return res.status(500).send({ error: "Failed to find cart." });
         });
 };
+
 
 
 
