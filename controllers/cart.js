@@ -53,6 +53,7 @@ module.exports.addToCart = (req, res) => {
                             // Include product name and description
                             cartItem.productName = foundProduct.name;
                             cartItem.productDescription = foundProduct.description;
+                            cartItem.productPrice = foundProduct.price;
                             cartItem.subtotal = cartItem.quantity * foundProduct.price;
                             return cartItem;
                         })
@@ -91,6 +92,7 @@ module.exports.addToCart = (req, res) => {
                             // Include product name and description
                             cartItem.productName = foundProduct.name;
                             cartItem.productDescription = foundProduct.description;
+                            cartItem.productPrice = foundProduct.price;
                             cartItem.subtotal = cartItem.quantity * foundProduct.price;
                             return cartItem;
                         })
