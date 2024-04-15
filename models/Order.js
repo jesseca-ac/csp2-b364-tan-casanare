@@ -11,6 +11,18 @@ const orderSchema = new mongoose.Schema({
             ref: "Product",
             required: [true, "ProductId is required"]
         },
+        productName: {
+            type: String,
+            required: [true, 'Product Name is Required']
+        },
+        productDescription: {
+            type: String,
+            required: [true, 'Product Description is Required']
+        },
+        productPrice: {
+            type: Number,
+            required: [true, 'Product Price is Required'],
+        },
         quantity: {
             type: Number,
             default: 0

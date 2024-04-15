@@ -21,7 +21,7 @@ const cartSchema = new mongoose.Schema({
 			},
 			productPrice: {
 				type: Number,
-				required: [true, 'Subtotal is Required'],
+				required: [true, 'Product Price is Required'],
 			},
 			quantity: {
 				type: Number,
